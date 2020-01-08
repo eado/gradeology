@@ -1,5 +1,7 @@
 {
   "name": "gradeology",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "react"
 }
