@@ -12,6 +12,7 @@ const Creds: React.FC = () => {
   const [showAlert, setShowAlert] = useState(false)
 
   const signIn = () => {
+    console.log([key, secret, uid])
     window.localStorage.setItem("key", key)
     window.localStorage.setItem("secret", secret)
     window.localStorage.setItem("uid", uid)
@@ -34,15 +35,15 @@ const Creds: React.FC = () => {
         <IonList>
             <IonItem>
                 <IonLabel position="stacked">Key</IonLabel>
-                <IonInput onChange={(ev) => setKey((ev.target as HTMLInputElement).value)}></IonInput>
+                <IonInput onIonChange={(ev) => setKey((ev.target as HTMLInputElement).value)}></IonInput>
             </IonItem>
             <IonItem>
                 <IonLabel position="stacked">Secret</IonLabel>
-                <IonInput onChange={(ev) => setSecret((ev.target as HTMLInputElement).value)}></IonInput>
+                <IonInput onIonChange={(ev) => setSecret((ev.target as HTMLInputElement).value)}></IonInput>
             </IonItem>
             <IonItem>
                 <IonLabel position="stacked">User ID</IonLabel>
-                <IonInput onChange={(ev) => setUid((ev.target as HTMLInputElement).value)}></IonInput>
+                <IonInput onIonChange={(ev) => setUid((ev.target as HTMLInputElement).value)}></IonInput>
             </IonItem>
             <br />
             <IonButton onClick={() => signIn()} expand="full">Sign In</IonButton>

@@ -11,22 +11,28 @@ export const refreshCreds = () => {
 }
 refreshCreds()
 
-export const getEndpoint = async (endpoint: string) => (await fetch('https://api.schoology.com/v1/' + endpoint, {
-    method: 'GET',
-    headers: {
-        'Authorization': `OAuth oauth_consumer_key=\"${key}\",oauth_signature_method=\"PLAINTEXT\",oauth_timestamp=\"${Date.now() / 1000}\",oauth_nonce=\"${v4()}\",oauth_version=\"1.0\",oauth_signature=\"${secret}%26\"`
+export const getEndpoint = (endpoint: string) => {
+    const headers = {
+        'Authorization': `OAuth oauth_consumer_key="${key}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now() / 1000}",oauth_nonce="${v4()}",oauth_version="1.0",oauth_signature="${secret}%26"`
     }
-})).json()
+    console.log(headers)
+    return fetch('http://localhost:1337/api.schoology.com/v1/' + endpoint, {
+        method: 'GET',
+        headers
+    })
+}
 
 function creator<T>(endpoint: string, cb: (data: any, res: (data: T) => void, rej: (data: any) => void) => void) {
     return new Promise<T>((res, rej) => {
         getEndpoint(endpoint).then(resp => {
-            if (!resp) {
-                rej("Invalid Credentials")
-            } else {
-                cb(resp, res, rej)
-                window.localStorage.setItem("verified", "true")
-            }
+            resp.json().then((data) => {
+                if (!data) {
+                    rej("Invalid Credentials")
+                } else {
+                    cb(data, res, rej)
+                    window.localStorage.setItem("verified", "true")
+                }
+            }).catch((e) => {console.log(e); rej(e)})
         })
     })
 }
@@ -42,3 +48,10 @@ export const testCreds = () => creator<void>("users/" + uid, (data, res, rej) =>
 export const getSections = () => creator<any[]>("users/" + uid + "/sections", (d, r, _) => {
     r(d.section.map((section: any) => {return {id: section.id, name: section.course_title}}))
 })
+
+export const getGradingCategoriesForSection = (section: string) => creator<any[]>("sections/" + section + "/grading_categories", (d, r, _) => {
+    r(d.grading_category.map((cat: any) => {return {id: cat.id, name: cat.title}}))
+})
+
+const sections = []
+

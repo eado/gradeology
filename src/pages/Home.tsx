@@ -1,23 +1,28 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import React from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem } from '@ionic/react';
+import React, { useState, useEffect } from 'react';
+import { getSections } from '../Schoology';
 
 const Home: React.FC = () => {
+  const [sections, setSections] = useState([] as any[])
+
+  useEffect(() => {
+    if (sections.length < 1) {
+      getSections().then((s) => {
+        setSections(s)
+      })
+    }
+  })
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Ionic Blank</IonTitle>
+          <IonTitle>Grades</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        The world is your oyster.
-        <p>
-          If you get lost, the{' '}
-          <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/">
-            docs
-          </a>{' '}
-          will be your guide.
-        </p>
+        <IonList>
+          {sections.map((section, i) => <IonItem key={i}>{section.name + ", " + section.id}</IonItem>)}
+        </IonList>
       </IonContent>
     </IonPage>
   );
