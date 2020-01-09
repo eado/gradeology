@@ -45,7 +45,7 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactHashRouter>
       <IonRouterOutlet>
-        <Route path="/home/section/:name/:id" component={Section} exact={true} />
+        <Route path="/home/section/:name/:id/" component={Section} exact={true} />
         <Route path="/creds" component={Creds} exact={true} />
         <Route path="/home" component={Home} exact={true} />
         <Route exact path="/" render={() => <Redirect to={window.localStorage.getItem("verified") ? "/home" : "/creds"} />} />

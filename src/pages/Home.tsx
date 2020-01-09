@@ -26,7 +26,7 @@ const Home: React.FC = () => {
             {section.name}
             <IonNote slot="end">
               <b>{getLetterGradeFromPercent(section.grade)}&nbsp;</b> 
-              {section.grade}
+              ({section.grade}%)
             </IonNote>
           </IonItem>)}
         </IonList>
