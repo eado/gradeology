@@ -55,7 +55,7 @@ const Section: React.FC<{match: any}> = (props) => {
                     return <IonList key={i}>
                                 <IonItem><b>{cat.title} ({cat.weight}%)</b> {cat.grade ? <IonNote slot="end"><b>{getLetterGradeFromPercent(cat.grade)} ({cat.grade}%)</b></IonNote>: null}</IonItem>
                                 {cat.assignments.map((a: any, t: number) => {
-                                    return <IonItem key={t}>
+                                    return <IonItem lines="none" key={t}>
                                         {a.title}
                                         {gradeForAssignment(a)}
                                     </IonItem>

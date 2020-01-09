@@ -49,7 +49,7 @@ export const testCreds = () => creator<void>("users/" + uid, (data, res, rej) =>
 })
 
 export const getSections = () => creator<any[]>("users/" + uid + "/sections", (d, r, _) => {
-    r(d.section.map((section: any) => {return {id: section.id, name: section.course_title, gp: section.grading_periods}}))
+    r(d.section.map((section: any) => {return {id: section.id, name: section.course_title, gp: section.grading_periods, image: section.profile_url}}))
 })
 
 export const getSectionName = (section: string) => creator<string>("sections/" + section, (d, r, _) => {
@@ -113,6 +113,7 @@ export const getGrades = () => {
                     }
                     sections[t].section_id = secs[idx].id
                     sections[t].name = secs[idx].name
+                    sections[t].image = secs[idx].image
                     t++
                 }
                 res()
@@ -126,7 +127,7 @@ export const getFinalGrades = () => {
     let finalGrades: any[] = []
     for (let section of sections) {
         if (section.final_grade[0].grade && section.name) {
-            finalGrades.push({grade: section.final_grade[0].grade, name: capitalize(section.name), id: section.section_id})
+            finalGrades.push({grade: section.final_grade[0].grade, name: capitalize(section.name), id: section.section_id, image: section.image})
         }
     }
 
