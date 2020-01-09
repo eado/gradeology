@@ -17,13 +17,13 @@
     "static/js/7.7ca9a7da.chunk.js": "/gradeology/static/js/7.7ca9a7da.chunk.js",
     "static/js/7.7ca9a7da.chunk.js.map": "/gradeology/static/js/7.7ca9a7da.chunk.js.map",
     "main.css": "/gradeology/static/css/main.d8804b09.chunk.css",
-    "main.js": "/gradeology/static/js/main.c1e5690d.chunk.js",
-    "main.js.map": "/gradeology/static/js/main.c1e5690d.chunk.js.map",
+    "main.js": "/gradeology/static/js/main.48bc2e6a.chunk.js",
+    "main.js.map": "/gradeology/static/js/main.48bc2e6a.chunk.js.map",
     "runtime-main.js": "/gradeology/static/js/runtime-main.13e98404.js",
     "runtime-main.js.map": "/gradeology/static/js/runtime-main.13e98404.js.map",
     "static/css/10.49ed8f15.chunk.css": "/gradeology/static/css/10.49ed8f15.chunk.css",
-    "static/js/10.79837161.chunk.js": "/gradeology/static/js/10.79837161.chunk.js",
-    "static/js/10.79837161.chunk.js.map": "/gradeology/static/js/10.79837161.chunk.js.map",
+    "static/js/10.96c0e524.chunk.js": "/gradeology/static/js/10.96c0e524.chunk.js",
+    "static/js/10.96c0e524.chunk.js.map": "/gradeology/static/js/10.96c0e524.chunk.js.map",
     "static/js/11.fca6ce27.chunk.js": "/gradeology/static/js/11.fca6ce27.chunk.js",
     "static/js/11.fca6ce27.chunk.js.map": "/gradeology/static/js/11.fca6ce27.chunk.js.map",
     "static/js/12.bee01b7f.chunk.js": "/gradeology/static/js/12.bee01b7f.chunk.js",
@@ -203,11 +203,11 @@
     "static/js/99.e65d8af2.chunk.js": "/gradeology/static/js/99.e65d8af2.chunk.js",
     "static/js/99.e65d8af2.chunk.js.map": "/gradeology/static/js/99.e65d8af2.chunk.js.map",
     "index.html": "/gradeology/index.html",
-    "precache-manifest.91e1977901220489c33710502c68b8e2.js": "/gradeology/precache-manifest.91e1977901220489c33710502c68b8e2.js",
+    "precache-manifest.506455a42fce10d3b1e6e86122c27fb5.js": "/gradeology/precache-manifest.506455a42fce10d3b1e6e86122c27fb5.js",
     "service-worker.js": "/gradeology/service-worker.js",
     "static/css/10.49ed8f15.chunk.css.map": "/gradeology/static/css/10.49ed8f15.chunk.css.map",
     "static/css/main.d8804b09.chunk.css.map": "/gradeology/static/css/main.d8804b09.chunk.css.map",
-    "static/js/10.79837161.chunk.js.LICENSE": "/gradeology/static/js/10.79837161.chunk.js.LICENSE",
+    "static/js/10.96c0e524.chunk.js.LICENSE": "/gradeology/static/js/10.96c0e524.chunk.js.LICENSE",
     "static/js/80.4b76a074.chunk.js.LICENSE": "/gradeology/static/js/80.4b76a074.chunk.js.LICENSE",
     "static/js/93.45266b0e.chunk.js.LICENSE": "/gradeology/static/js/93.45266b0e.chunk.js.LICENSE",
     "static/js/95.aea79738.chunk.js.LICENSE": "/gradeology/static/js/95.aea79738.chunk.js.LICENSE",
@@ -913,8 +913,8 @@
   "entrypoints": [
     "static/js/runtime-main.13e98404.js",
     "static/css/10.49ed8f15.chunk.css",
-    "static/js/10.79837161.chunk.js",
+    "static/js/10.96c0e524.chunk.js",
     "static/css/main.d8804b09.chunk.css",
-    "static/js/main.c1e5690d.chunk.js"
+    "static/js/main.48bc2e6a.chunk.js"
   ]
 }
