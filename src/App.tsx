@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupConfig } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
+import { IonReactHashRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import Creds from './pages/Creds';
 
@@ -23,6 +23,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import Section from './pages/Section';
 
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -42,13 +43,14 @@ setupConfig({
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
+    <IonReactHashRouter>
       <IonRouterOutlet>
+        <Route path="/home/section/:name/:id" component={Section} exact={true} />
         <Route path="/creds" component={Creds} exact={true} />
         <Route path="/home" component={Home} exact={true} />
         <Route exact path="/" render={() => <Redirect to={window.localStorage.getItem("verified") ? "/home" : "/creds"} />} />
       </IonRouterOutlet>
-    </IonReactRouter>
+    </IonReactHashRouter>
   </IonApp>
 );
 

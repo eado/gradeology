@@ -1,6 +1,6 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonNote, IonProgressBar } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
-import { getSections, getGrades, getFinalGrades, getLetterGradeFromPercent } from '../Schoology';
+import { getGrades, getFinalGrades, getLetterGradeFromPercent } from '../Schoology';
 
 const Home: React.FC = () => {
   const [sections, setSections] = useState([] as any[])
@@ -16,13 +16,13 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Grades</IonTitle>
+          <IonTitle>Classes</IonTitle>
         </IonToolbar>
         {sections.length < 1 ? <IonProgressBar type="indeterminate"></IonProgressBar>: null}
       </IonHeader>
       <IonContent className="ion-padding">
         <IonList>
-          {sections.map((section, i) => <IonItem key={i}>
+          {sections.map((section, i) => <IonItem key={i} routerLink={"/home/section/" + section.name + "/" + section.id}>
             {section.name}
             <IonNote slot="end">
               <b>{getLetterGradeFromPercent(section.grade)}&nbsp;</b> 

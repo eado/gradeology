@@ -92,13 +92,11 @@ export const getGrades = () => {
             for (let section of secs) {
                 for (let gp of section.gp) {
                     if (gp !== 0 && !(gp in gradingPeriods)) {
-                        console.log(gp)
                         gradingPeriods.push(gp)
                     }
                 }
             }
             creator<void>("users/" + uid + "/grades?grading_period_ids=" + gradingPeriods, (d, r, _) => {
-                console.log(d)
                 sections = d.section
                 let t = 0
                 for (let section of sections) {
@@ -113,6 +111,7 @@ export const getGrades = () => {
                         }
                         i++
                     }
+                    sections[t].section_id = secs[idx].id
                     sections[t].name = secs[idx].name
                     t++
                 }
@@ -127,7 +126,7 @@ export const getFinalGrades = () => {
     let finalGrades: any[] = []
     for (let section of sections) {
         if (section.final_grade[0].grade && section.name) {
-            finalGrades.push({grade: section.final_grade[0].grade, name: capitalize(section.name)})
+            finalGrades.push({grade: section.final_grade[0].grade, name: capitalize(section.name), id: section.section_id})
         }
     }
 
@@ -156,3 +155,45 @@ const capitalize = (str: string) => {
     }
     return capital
 }
+
+export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "/assignments?start=0&limit=10000", (d, r, _) => {
+    let categories: any[] = []
+
+    let section: any = {}
+    for (let sec of sections) {
+        if (sec.section_id === s) {
+            section = sec
+            categories = section.grading_category
+            for (let cat of section.final_grade[0].grading_category) {
+                let i = 0
+                for (let cat2 of categories) {
+                    if (cat2.id === cat.category_id) {
+                        categories[i].grade = cat.grade
+                        categories[i]['assignments'] = []
+                    }
+                    i++
+                }
+            }
+            break
+        }
+    }
+    for (let assignment of d.assignment) {
+        for (let a of section.period[0].assignment) {
+            if (a.assignment_id === assignment.id) {
+                console.log("afound")
+                const iassignment = {...a, ...assignment}
+                console.log(iassignment)
+                let i = 0
+                for (let cat of categories) {
+                    console.log(cat.id)
+                    if (cat.id === Number(iassignment.grading_category)) {
+                        categories[i].assignments.push(iassignment)
+                    }
+                    i++
+                }
+            }
+        }
+    }
+
+    r(categories)
+})
