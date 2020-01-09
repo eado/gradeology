@@ -15,7 +15,6 @@ export const getEndpoint = (endpoint: string) => {
     const headers = {
         'Authorization': `OAuth oauth_consumer_key="${key}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now() / 1000}",oauth_nonce="${v4()}",oauth_version="1.0",oauth_signature="${secret}%26"`
     }
-    // console.log(headers)
     return fetch('https://cors-anywhere.herokuapp.com/api.schoology.com/v1/' + endpoint, {
         method: 'GET',
         headers
@@ -181,12 +180,9 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
     for (let assignment of d.assignment) {
         for (let a of section.period[0].assignment) {
             if (a.assignment_id === assignment.id) {
-                console.log("afound")
                 const iassignment = {...a, ...assignment}
-                console.log(iassignment)
                 let i = 0
                 for (let cat of categories) {
-                    console.log(cat.id)
                     if (cat.id === Number(iassignment.grading_category)) {
                         categories[i].assignments.push(iassignment)
                     }
