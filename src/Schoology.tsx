@@ -195,5 +195,20 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
         }
     }
 
+    categories.forEach((cat, i) => {
+        let totalPoints = 0
+        let points = 0
+
+        for (let assignment of cat.assignments) {
+            if (assignment.grade) {
+                totalPoints += Number(assignment.max_points)
+                points += Number(assignment.grade)
+            }
+        }
+
+        categories[i]['totalPoints'] = totalPoints
+        categories[i]['points'] = points
+    })
+
     r(categories)
 })

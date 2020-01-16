@@ -53,7 +53,7 @@ const Section: React.FC<{match: any}> = (props) => {
             <IonContent className="ion-padding">
                 {categories.map((cat, i) => {
                     return <IonList key={i}>
-                                <IonItem><b>{cat.title} ({cat.weight}%)</b> {cat.grade ? <IonNote slot="end"><b>{getLetterGradeFromPercent(cat.grade)} ({cat.grade}%)</b></IonNote>: null}</IonItem>
+                                <IonItem><b>{cat.title} ({cat.weight}%)</b> {cat.grade ? <IonNote slot="end"><b>{getLetterGradeFromPercent(cat.grade)} ({cat.grade}%) {cat.points}/{cat.totalPoints}</b></IonNote>: null}</IonItem>
                                 {cat.assignments.map((a: any, t: number) => {
                                     return <IonItem key={t}>
                                         {a.title}
