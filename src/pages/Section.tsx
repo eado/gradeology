@@ -3,7 +3,7 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonProgressBar, IonContent, I
 import { sections, getAssignments, getGrades, getLetterGradeFromPercent } from '../Schoology';
 import moment from 'moment';
 
-const round = (value: number, decimals: number) => {
+export const round = (value: number, decimals: number) => {
     return Number(Math.round(Number(String(value)+'e'+String(decimals)))+'e-'+decimals);
 }
 
@@ -24,20 +24,20 @@ const Section: React.FC<{match: any}> = (props) => {
         }
     })
 
-    const gradeForAssignment = (a: any) => {
+    const gfa = (a: any) => {
         let string = ""
         let percent = 0
-        let letterGrade = <b></b>
+        let letterGrade = ""
         if (a.grade) {
             percent = round(a.grade*100 / Number(a.max_points), 2)
-            letterGrade = <b>{getLetterGradeFromPercent(percent)}</b>
+            letterGrade = getLetterGradeFromPercent(percent)
             string += a.grade
         } else {
             string += "*"
         }
         string += "/" + a.max_points + " (" + percent + "%)"
 
-        return <IonNote slot="end">{letterGrade}&nbsp;{string}</IonNote>
+        return [letterGrade, string]
     }
 
     const checkIfMissing = (a: any) => {        
@@ -58,11 +58,18 @@ const Section: React.FC<{match: any}> = (props) => {
             <IonContent className="ion-padding">
                 {categories.map((cat, i) => {
                     return <IonList key={i}>
-                                <IonItem><b>{cat.title} ({cat.weight}%)</b> {cat.grade ? <IonNote slot="end"><b>{getLetterGradeFromPercent(cat.grade)} ({cat.grade}%) {cat.points}/{cat.totalPoints}</b></IonNote>: null}</IonItem>
+                                <IonItem><b>{cat.title} ({cat.weight}%)</b> {cat.grade ? <IonNote slot="end"><b>{getLetterGradeFromPercent(cat.grade)} {cat.points}/{cat.totalPoints} ({cat.grade}%) </b></IonNote>: null}</IonItem>
                                 {cat.assignments.map((a: any, t: number) => {
-                                    return <IonItem color={checkIfMissing(a) ? "danger" : ""} lines="none" key={t}>
-                                        {a.title}
-                                        {gradeForAssignment(a)}
+                                    return <IonItem lines="none" key={t}>
+                                        {checkIfMissing(a) ? <>
+                                            <i>{a.title}</i>
+                                            <IonNote slot="end"><i><b>{gfa(a)[0]}</b> {gfa(a)[1]}</i></IonNote>
+                                        </> : <>
+                                            {a.title}
+                                            <IonNote slot="end"><b>{gfa(a)[0]}</b> {gfa(a)[1]}</IonNote>
+                                        </>
+                                        }
+                                       
                                     </IonItem>
                                 })}
                     </IonList>

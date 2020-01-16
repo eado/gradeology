@@ -1,4 +1,5 @@
 import { v4 } from 'uuid';
+import { round } from './pages/Section';
 
 let key = ""
 let secret = ""
@@ -203,8 +204,8 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
             }
         }
 
-        categories[i]['totalPoints'] = totalPoints
-        categories[i]['points'] = points
+        categories[i]['totalPoints'] = round(totalPoints, 2)
+        categories[i]['points'] = round(points, 2)
     })
 
     r(categories)
