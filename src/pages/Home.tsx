@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonNote, IonProgressBar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonNote, IonProgressBar, IonThumbnail, IonImg, IonLabel } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
 import { getGrades, getFinalGrades, getLetterGradeFromPercent } from '../Schoology';
 
@@ -22,8 +22,9 @@ const Home: React.FC = () => {
       </IonHeader>
       <IonContent className="ion-padding">
         <IonList>
-          {sections.map((section, i) => <IonItem key={i} routerLink={"/home/section/" + section.name + "/" + section.id}>
-            {section.name}
+          {sections.map((section, i) => <IonItem lines="none" key={i} routerLink={"/home/section/" + section.name + "/" + section.id}>
+            <IonThumbnail slot="start"><IonImg src={section.image}/></IonThumbnail>
+            <IonLabel>{section.name}</IonLabel>
             <IonNote slot="end">
               <b>{getLetterGradeFromPercent(section.grade)}&nbsp;</b> 
               ({section.grade}%)

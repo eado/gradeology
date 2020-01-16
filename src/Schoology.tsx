@@ -15,7 +15,6 @@ export const getEndpoint = (endpoint: string) => {
     const headers = {
         'Authorization': `OAuth oauth_consumer_key="${key}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now() / 1000}",oauth_nonce="${v4()}",oauth_version="1.0",oauth_signature="${secret}%26"`
     }
-    // console.log(headers)
     return fetch('https://cors-anywhere.herokuapp.com/api.schoology.com/v1/' + endpoint, {
         method: 'GET',
         headers
@@ -49,7 +48,7 @@ export const testCreds = () => creator<void>("users/" + uid, (data, res, rej) =>
 })
 
 export const getSections = () => creator<any[]>("users/" + uid + "/sections", (d, r, _) => {
-    r(d.section.map((section: any) => {return {id: section.id, name: section.course_title, gp: section.grading_periods}}))
+    r(d.section.map((section: any) => {return {id: section.id, name: section.course_title, gp: section.grading_periods, image: section.profile_url}}))
 })
 
 export const getSectionName = (section: string) => creator<string>("sections/" + section, (d, r, _) => {
@@ -113,6 +112,7 @@ export const getGrades = () => {
                     }
                     sections[t].section_id = secs[idx].id
                     sections[t].name = secs[idx].name
+                    sections[t].image = secs[idx].image
                     t++
                 }
                 res()
@@ -126,7 +126,7 @@ export const getFinalGrades = () => {
     let finalGrades: any[] = []
     for (let section of sections) {
         if (section.final_grade[0].grade && section.name) {
-            finalGrades.push({grade: section.final_grade[0].grade, name: capitalize(section.name), id: section.section_id})
+            finalGrades.push({grade: section.final_grade[0].grade, name: capitalize(section.name), id: section.section_id, image: section.image})
         }
     }
 
@@ -180,12 +180,9 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
     for (let assignment of d.assignment) {
         for (let a of section.period[0].assignment) {
             if (a.assignment_id === assignment.id) {
-                console.log("afound")
                 const iassignment = {...a, ...assignment}
-                console.log(iassignment)
                 let i = 0
                 for (let cat of categories) {
-                    console.log(cat.id)
                     if (cat.id === Number(iassignment.grading_category)) {
                         categories[i].assignments.push(iassignment)
                     }

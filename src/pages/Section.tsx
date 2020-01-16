@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonProgressBar, IonContent, IonList, IonButtons, IonBackButton, IonListHeader, IonItem, IonNote } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonProgressBar, IonContent, IonList, IonButtons, IonBackButton, IonItem, IonNote } from '@ionic/react';
 import { sections, getAssignments, getGrades, getLetterGradeFromPercent } from '../Schoology';
+import moment from 'moment';
 
 const round = (value: number, decimals: number) => {
     return Number(Math.round(Number(String(value)+'e'+String(decimals)))+'e-'+decimals);
@@ -39,6 +40,10 @@ const Section: React.FC<{match: any}> = (props) => {
         return <IonNote slot="end">{letterGrade}&nbsp;{string}</IonNote>
     }
 
+    const checkIfMissing = (a: any) => {        
+        return moment(a.due).diff(moment(Date.now())) < 0 && !(a.grade)
+    }
+
     return (
         <IonPage>
             <IonHeader>
@@ -55,7 +60,7 @@ const Section: React.FC<{match: any}> = (props) => {
                     return <IonList key={i}>
                                 <IonItem><b>{cat.title} ({cat.weight}%)</b> {cat.grade ? <IonNote slot="end"><b>{getLetterGradeFromPercent(cat.grade)} ({cat.grade}%) {cat.points}/{cat.totalPoints}</b></IonNote>: null}</IonItem>
                                 {cat.assignments.map((a: any, t: number) => {
-                                    return <IonItem key={t}>
+                                    return <IonItem color={checkIfMissing(a) ? "danger" : ""} lines="none" key={t}>
                                         {a.title}
                                         {gradeForAssignment(a)}
                                     </IonItem>
