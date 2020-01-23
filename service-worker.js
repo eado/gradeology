@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/gradeology/precache-manifest.030d1235f8b9cdbee6c5eafd63bea57a.js"
+  "/gradeology/precache-manifest.7d8a99f675df0f2fbd103dee46b1ef7e.js"
 );
 
 self.addEventListener('message', (event) => {
