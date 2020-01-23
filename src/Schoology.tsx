@@ -221,7 +221,6 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
                 id: Infinity
             }: null, ...section.grading_category]
 
-
             categories = categories.filter(val => val ? val : null)
            
             for (let cat of section.final_grade.find((i: any) => i.grading_category).grading_category) {
