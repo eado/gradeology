@@ -83,6 +83,8 @@ export const getLetterGradeFromPercent = (percent: number) => {
         return 'D'
     } else if (percent > 59.44) {
         return 'D-'
+    } else if (isNaN(percent)) {
+        return '?'
     } else {
         return 'F'
     }
@@ -143,7 +145,7 @@ export const getFinalGrades = () => {
             }
         }
         if (grade && section.name) {
-            finalGrades.push({grade, examGrade: examGrade ? examGrade.grade : null, classGrade: classGrade ? classGrade.grade : null, name: capitalize(section.name), id: section.section_id, image: section.image})
+            finalGrades.push({grade, examGrade: (examGrade && classGrade) ? round(examGrade.grade / ((examGrade.grade) / (10 * (grade - 0.9 * classGrade.grade))), 2) : null, classGrade: classGrade ? classGrade.grade : null, name: capitalize(section.name), id: section.section_id, image: section.image})
         }
     }
 
@@ -204,9 +206,9 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
             }, examGrade ? {
                 title: "Exam",
                 weight: 10,
-                grade: examGrade.grade,
+                grade: round(examGrade.grade / ((examGrade.grade) / (10 * (grade - 0.9 * classGrade.grade))), 2),
                 points: examGrade.grade,
-                totalPoints: 100,
+                totalPoints: round(((examGrade.grade) / (10 * (grade - 0.9 * classGrade.grade))) * 100, 2),
                 assignments: [],
                 id: Infinity
             } : null, classGrade ? {
