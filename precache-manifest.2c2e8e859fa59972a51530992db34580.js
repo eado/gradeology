@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c559076abd5774620eb4fe4b60648cf4",
+    "revision": "c5c47a164188adb129e1171dfa5dfa31",
     "url": "/gradeology/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/gradeology/static/css/10.49ed8f15.chunk.css"
   },
   {
-    "revision": "1b65ee7397592c60e26c",
+    "revision": "74bff34fcbbd4b005913",
     "url": "/gradeology/static/css/main.d8804b09.chunk.css"
   },
   {
@@ -428,8 +428,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/gradeology/static/js/99.1dd3a21b.chunk.js.LICENSE"
   },
   {
-    "revision": "1b65ee7397592c60e26c",
-    "url": "/gradeology/static/js/main.2ff0d885.chunk.js"
+    "revision": "74bff34fcbbd4b005913",
+    "url": "/gradeology/static/js/main.6e025cc4.chunk.js"
   },
   {
     "revision": "6c7a1a0723c33999c2fa",
