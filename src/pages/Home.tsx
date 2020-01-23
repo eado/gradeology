@@ -26,6 +26,14 @@ const Home: React.FC = () => {
             <IonThumbnail slot="start"><IonImg src={section.image}/></IonThumbnail>
             <IonLabel>{section.name}</IonLabel>
             <IonNote slot="end">
+              {section.classGrade ? <>
+                <b>{getLetterGradeFromPercent(section.classGrade)}&nbsp;</b> 
+                ({section.classGrade}%)&ensp;
+              </> : null}
+              {section.examGrade ? <>
+                <b>{getLetterGradeFromPercent(section.examGrade)}&nbsp;</b> 
+                ({section.examGrade}%)&ensp;
+              </> : null}
               <b>{getLetterGradeFromPercent(section.grade)}&nbsp;</b> 
               ({section.grade}%)
             </IonNote>

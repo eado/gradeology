@@ -22,7 +22,7 @@ const Section: React.FC<{match: any}> = (props) => {
                 setCategories(categories)
             })
         }
-    })
+    }, [])
 
     const gfa = (a: any) => {
         let string = ""
@@ -57,8 +57,8 @@ const Section: React.FC<{match: any}> = (props) => {
             </IonHeader>
             <IonContent className="ion-padding">
                 {categories.map((cat, i) => {
-                    return <IonList key={i}>
-                                <IonItem><b>{cat.title} ({cat.weight}%)</b> {cat.grade ? <IonNote slot="end"><b>{getLetterGradeFromPercent(cat.grade)} {cat.points}/{cat.totalPoints} ({cat.grade}%) </b></IonNote>: null}</IonItem>
+                    return cat.weight != 0 ? <IonList key={i}>
+                                <IonItem lines={cat.assignments.length > 0  ? "full" : "none"}><b>{cat.title} ({cat.weight}%)</b> {cat.grade ? <IonNote slot="end"><b>{getLetterGradeFromPercent(cat.grade)} {cat.points}/{cat.totalPoints} ({cat.grade}%) </b></IonNote>: null}</IonItem>
                                 {cat.assignments.map((a: any, t: number) => {
                                     return <IonItem lines="none" key={t}>
                                         {checkIfMissing(a) ? <>
@@ -72,7 +72,7 @@ const Section: React.FC<{match: any}> = (props) => {
                                        
                                     </IonItem>
                                 })}
-                    </IonList>
+                    </IonList>: null
                 })}
             </IonContent>
         </IonPage>
