@@ -196,9 +196,9 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
             }, examGrade ? {
                 title: "Exam",
                 weight: 10,
-                grade: round(examGrade.grade / ((examGrade.grade) / (10 * (grade - 0.9 * classGrade.grade))), 2),
+                grade: round(10 * (grade - 0.9 * classGrade.grade), 2),
                 points: examGrade.grade,
-                totalPoints: round(((examGrade.grade) / (10 * (grade - 0.9 * classGrade.grade))) * 100, 2),
+                totalPoints: round((examGrade.grade / (grade - 0.9 * classGrade.grade)) * 10, 2),
                 assignments: [],
                 id: Infinity
             } : null, classGrade ? {
@@ -263,7 +263,6 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
         }
         i++;
     }
-
 
     r(categories)
 })
