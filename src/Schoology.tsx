@@ -129,7 +129,6 @@ export const getGrades = () => {
 
 export const getFinalGrades = () => {
     let finalGrades: any[] = []
-    let i = 0
     for (let section of sections) {
         console.log(section.final_grade)
         let grade = section.final_grade[0].grade
@@ -146,8 +145,6 @@ export const getFinalGrades = () => {
         if (grade && section.name) {
             finalGrades.push({grade, examGrade: examGrade ? examGrade.grade : null, classGrade: classGrade ? classGrade.grade : null, name: capitalize(section.name), id: section.section_id, image: section.image})
         }
- 
-        i++ 
     }
 
     return finalGrades
@@ -225,12 +222,11 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
 
             categories = categories.filter(val => val ? val : null)
            
-            console.log(categories)
             for (let cat of section.final_grade.find((i: any) => i.grading_category).grading_category) {
                 let i = 0
                 for (let cat2 of categories) {
                     categories[i]['assignments'] = []
-                    if (cat2 === cat.category_id) {
+                    if (cat2.id === cat.category_id) {
                         categories[i].grade = cat.grade
                         categories[i]['assignments'] = []
                     }
@@ -255,8 +251,9 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
         }
     }
 
-    categories.forEach((cat, i) => {
-        if (cat.assignments && cat.assignments.length > 0) {
+    let i = 0
+    for (let cat of categories) {
+        if (!cat.totalPoints) {
             let totalPoints = 0
             let points = 0
 
@@ -266,13 +263,16 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
                     points += Number(assignment.grade)
                 }
             }
-            
+            console.log(cat.id)
+            console.log(totalPoints)
+            console.log(points)
 
             categories[i]['totalPoints'] = round(totalPoints, 2)
             categories[i]['points'] = round(points, 2)
         }
-        
-    })
+        i++;
+    }
+
 
     r(categories)
 })
