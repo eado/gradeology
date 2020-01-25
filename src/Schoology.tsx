@@ -48,6 +48,9 @@ export const testCreds = () => creator<void>("users/" + uid, (data, res, rej) =>
 })
 
 export const getSections = () => creator<any[]>("users/" + uid + "/sections", (d, r, _) => {
+    const httpsPU = (pu: string) => {
+        return "https:" + pu.split(":")[1]
+    }
     r(d.section.map((section: any) => {return {id: section.id, name: section.course_title, gp: section.grading_periods, image: section.profile_url}}))
 })
 
