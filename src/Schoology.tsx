@@ -1,8 +1,13 @@
 import { v4 } from 'uuid';
+import { round } from './pages/Section';
 
 let key = ""
 let secret = ""
 let uid = ""
+
+export function filterUndef<T>(ts: (T | undefined)[]): T[] {
+    return ts.filter((t: T | undefined): t is T => !!t)
+}
 
 export const refreshCreds = () => {
     key = window.localStorage.getItem("key") ? window.localStorage.getItem("key") as string : ""
@@ -81,6 +86,8 @@ export const getLetterGradeFromPercent = (percent: number) => {
         return 'D'
     } else if (percent > 59.44) {
         return 'D-'
+    } else if (isNaN(percent)) {
+        return '?'
     } else {
         return 'F'
     }
@@ -90,7 +97,7 @@ export let sections: any[] = []
 export const getGrades = () => {
     return new Promise<void>((res, rej) => {
         getSections().then(secs => {
-            let gradingPeriods = []
+            let gradingPeriods = ["final"]
             for (let section of secs) {
                 for (let gp of section.gp) {
                     if (gp !== 0 && !(gp in gradingPeriods)) {
@@ -128,8 +135,20 @@ export const getGrades = () => {
 export const getFinalGrades = () => {
     let finalGrades: any[] = []
     for (let section of sections) {
-        if (section.final_grade[0].grade && section.name) {
-            finalGrades.push({grade: section.final_grade[0].grade, name: capitalize(section.name), id: section.section_id, image: section.image})
+        console.log(section.final_grade)
+        let grade = section.final_grade[0].grade
+        let examGrade: any = null
+        let classGrade: any = null
+        const cgrade = section.final_grade.find((i: any) => i.period_id === "final")
+        if (cgrade) {
+            grade = cgrade.grade
+            examGrade = section.final_grade.find((i: any) => i.period_id !== "final" && !i.grading_category)
+            if (examGrade && examGrade.grade) { 
+                classGrade = section.final_grade.find((i: any) => i.period_id !== "final" && i.grading_category)
+            }
+        }
+        if (grade && section.name) {
+            finalGrades.push({grade, examGrade: (examGrade && classGrade) ? round(examGrade.grade / ((examGrade.grade) / (10 * (grade - 0.9 * classGrade.grade))), 2) : null, classGrade: classGrade ? classGrade.grade : null, name: capitalize(section.name), id: section.section_id, image: section.image})
         }
     }
 
@@ -166,10 +185,51 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
     for (let sec of sections) {
         if (sec.section_id === s) {
             section = sec
-            categories = section.grading_category
-            for (let cat of section.final_grade[0].grading_category) {
+
+            let grade = section.final_grade[0].grade
+            let examGrade: any = null
+            let classGrade: any = null
+            const cgrade = section.final_grade.find((i: any) => i.period_id === "final")
+            if (cgrade) {
+                grade = cgrade.grade
+                examGrade = section.final_grade.find((i: any) => i.period_id !== "final" && !i.grading_category)
+                if (examGrade && examGrade.grade) { 
+                    classGrade = section.final_grade.find((i: any) => i.period_id !== "final" && i.grading_category)
+                }
+            }
+
+            categories = [{
+                title: "Final",
+                weight: 100,
+                grade: grade,
+                points: grade,
+                totalPoints: 100,
+                assignments: [],
+                id: Infinity
+            }, (examGrade && classGrade) ? {
+                title: "Exam",
+                weight: 10,
+                grade: round(examGrade.grade / ((examGrade.grade) / (10 * (grade - 0.9 * classGrade.grade))), 2),
+                points: examGrade.grade,
+                totalPoints: round(((examGrade.grade) / (10 * (grade - 0.9 * classGrade.grade))) * 100, 2),
+                assignments: [],
+                id: Infinity
+            } : null, classGrade ? {
+                title: "Class",
+                weight: 90,
+                grade: classGrade.grade,
+                points: classGrade.grade,
+                totalPoints: 100,
+                assignments: [],
+                id: Infinity
+            }: null, ...section.grading_category]
+
+            categories = categories.filter(val => val ? val : null)
+           
+            for (let cat of section.final_grade.find((i: any) => i.grading_category).grading_category) {
                 let i = 0
                 for (let cat2 of categories) {
+                    categories[i]['assignments'] = []
                     if (cat2.id === cat.category_id) {
                         categories[i].grade = cat.grade
                         categories[i]['assignments'] = []
@@ -194,6 +254,29 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
             }
         }
     }
+
+    let i = 0
+    for (let cat of categories) {
+        if (!cat.totalPoints) {
+            let totalPoints = 0
+            let points = 0
+
+            for (let assignment of cat.assignments) {
+                if (assignment.grade) {
+                    totalPoints += Number(assignment.max_points)
+                    points += Number(assignment.grade)
+                }
+            }
+            console.log(cat.id)
+            console.log(totalPoints)
+            console.log(points)
+
+            categories[i]['totalPoints'] = round(totalPoints, 2)
+            categories[i]['points'] = round(points, 2)
+        }
+        i++;
+    }
+
 
     r(categories)
 })
