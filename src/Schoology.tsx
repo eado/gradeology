@@ -56,7 +56,7 @@ export const getSections = () => creator<any[]>("users/" + uid + "/sections", (d
     const httpsPU = (pu: string) => {
         return "https:" + pu.split(":")[1]
     }
-    r(d.section.map((section: any) => {return {id: section.id, name: section.course_title, gp: section.grading_periods, image: section.profile_url}}))
+    r(d.section.map((section: any) => {return {id: section.id, name: section.course_title, gp: section.grading_periods, image: httpsPU(section.profile_url)}}))
 })
 
 export const getSectionName = (section: string) => creator<string>("sections/" + section, (d, r, _) => {
