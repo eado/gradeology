@@ -158,18 +158,8 @@ export const getFinalGrades = () => {
 const capitalize = (str: string) => {
     let capital = ""
     for (let word of str.split(" ")) {
-        let w = ""
         if (word.length > 3) {
-            let i = 0
-            for (let char of word.split("")) {
-                if (i === 0) {
-                    w += char.toUpperCase()
-                } else {
-                    w+= char.toLowerCase()
-                }
-                i++
-            }
-            
+            w = word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()
         } else {
             w = word
         }
@@ -209,9 +199,9 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
             }, (examGrade && classGrade) ? {
                 title: "Exam",
                 weight: 10,
-                grade: round(examGrade.grade / ((examGrade.grade) / (10 * (grade - 0.9 * classGrade.grade))), 2),
+                grade: round(10 * (grade - 0.9 * classGrade.grade), 2),
                 points: examGrade.grade,
-                totalPoints: round(((examGrade.grade) / (10 * (grade - 0.9 * classGrade.grade))) * 100, 2),
+                totalPoints: round((examGrade.grade / (grade - 0.9 * classGrade.grade)) * 10, 2),
                 assignments: [],
                 id: Infinity
             } : null, classGrade ? {
@@ -276,7 +266,6 @@ export const getAssignments = (s: number) => creator<any[]>("/sections/" + s + "
         }
         i++;
     }
-
 
     r(categories)
 })
