@@ -158,6 +158,7 @@ export const getFinalGrades = () => {
 const capitalize = (str: string) => {
     let capital = ""
     for (let word of str.split(" ")) {
+        let w = ""
         if (word.length > 3) {
             w = word.charAt(0).toUpperCase() + word.substring(1).toLowerCase()
         } else {
