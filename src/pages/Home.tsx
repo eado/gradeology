@@ -1,17 +1,17 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonNote, IonProgressBar, IonThumbnail, IonImg, IonLabel } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
-import { getGrades, getFinalGrades, getLetterGradeFromPercent } from '../Schoology';
+import { getLetterGradeFromPercent, getGradeData } from '../Schoology';
 
 const Home: React.FC = () => {
-  const [sections, setSections] = useState([] as any[])
+  const [sections] = useState([] as any[])
 
   useEffect(() => {
     if (sections.length < 1) {
-      getGrades().then(() => {
-        setSections(getFinalGrades())
+      getGradeData().then(() => {
+        console.log()
       })
     }
-  })
+  }, [])
   return (
     <IonPage>
       <IonHeader>

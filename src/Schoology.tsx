@@ -16,19 +16,24 @@ export const refreshCreds = () => {
 }
 refreshCreds()
 
-export const getEndpoint = (endpoint: string) => {
+export const getEndpoint = (endpoint: string, method='GET', body: string | null = null) => {
     const headers = {
-        'Authorization': `OAuth oauth_consumer_key="${key}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now() / 1000}",oauth_nonce="${v4()}",oauth_version="1.0",oauth_signature="${secret}%26"`
+        'Authorization': `OAuth oauth_consumer_key="${key}",oauth_signature_method="PLAINTEXT",oauth_timestamp="${Date.now() / 1000}",oauth_nonce="${v4()}",oauth_version="1.0",oauth_signature="${secret}%26"`,
+        'Origin': 'desktop',
+        'Content-Type': 'application/json'
     }
+    console.log(body)
     return fetch('https://cors-anywhere.herokuapp.com/api.schoology.com/v1/' + endpoint, {
-        method: 'GET',
-        headers
+        method,
+        headers,
+        body
     })
 }
 
 function creator<T>(endpoint: string, cb: (data: any, res: (data: T) => void, rej: (data: any) => void) => void) {
     return new Promise<T>((res, rej) => {
         getEndpoint(endpoint).then(resp => {
+            console.log(resp)
             if (resp.status !== 200) {
                 rej("Status not 200")
             }
@@ -51,6 +56,44 @@ export const testCreds = () => creator<void>("users/" + uid, (data, res, rej) =>
         rej("Invalid Credentials")
     }
 })
+
+
+let grades: any[] = []
+export const getGradeData = async () => {
+    const sections = await getSections()
+    const gps = Array.from(new Set(sections.flatMap(section => section.gp) as string[])).filter(val => val != '0')
+    gps.push("final")
+    const gradeData = await getGrades(gps)
+    sections.forEach(s => {
+        const gd = gradeData.find(g => g.section_id === s.id)
+        if (gd) {
+            grades.push({...gd, ...s})
+        }
+    })
+    const assignments = await getAllAssignments(grades.map(g => g.id))
+    grades.forEach((grade: any, index: number) => {
+        grades[index].assignments = assignments[grade.id]
+    });
+
+    console.log(grades)
+}
+
+export const getAllAssignments = async (sectionIDs: string[]) => {
+    console.log(JSON.stringify({request: sectionIDs.map(s => '/v1/sections/' + s + '/assignments?limit=10000')}))
+    let resp = await getEndpoint('multiget', 'POST', JSON.stringify({request: sectionIDs.map(s => '/v1/sections/' + s + '/assignments?limit=10000')}))
+    let json = await resp.json()
+
+    const ret: {[key: string]: any[]} = {}
+    for (let body of json.response) {
+        console.log(body)
+        const id = body.location.split("/")[3] as string
+        if (sectionIDs.indexOf(id) > 0) {
+            ret[id] = body.assignment
+        }
+    }
+    console.log(ret)
+    return ret
+}
 
 export const getSections = () => creator<any[]>("users/" + uid + "/sections", (d, r, _) => {
     const httpsPU = (pu: string) => {
@@ -93,8 +136,11 @@ export const getLetterGradeFromPercent = (percent: number) => {
     }
 }
 
+export const getGrades = (gps: string[]) => creator<any[]>("users/" + uid + "/grades?grading_period_ids=" + gps.join(","), (d, r, _) => {
+    r(d.section)
+})
 export let sections: any[] = []
-export const getGrades = () => {
+export const getGrades2 = () => {
     return new Promise<void>((res, rej) => {
         getSections().then(secs => {
             let gradingPeriods = ["final"]

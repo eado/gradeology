@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonProgressBar, IonContent, IonList, IonButtons, IonBackButton, IonItem, IonNote } from '@ionic/react';
-import { sections, getAssignments, getGrades, getLetterGradeFromPercent } from '../Schoology';
+import { sections, getAssignments, getLetterGradeFromPercent } from '../Schoology';
 import moment from 'moment';
 
 export const round = (value: number, decimals: number) => {
@@ -12,11 +12,11 @@ const Section: React.FC<{match: any}> = (props) => {
 
     useEffect(() => {
         if (sections.length < 1) {
-            getGrades().then(() => {
-                getAssignments(props.match.params.id).then((categories) => {
-                    setCategories(categories)
-                })
-            })
+            // getGrades().then(() => {
+            //     getAssignments(props.match.params.id).then((categories) => {
+            //         setCategories(categories)
+            //     })
+            // })
         } else {
             getAssignments(props.match.params.id).then((categories) => {
                 setCategories(categories)
